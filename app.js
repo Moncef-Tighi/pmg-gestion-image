@@ -5,20 +5,31 @@ import cors from 'cors';
 import { errorHandeler } from "./controllers/errorController.js";
 import cron, { CronJob } from "cron"
 import pgsql from "./model/db.js";
+import pino from "pino";
+import { addNewImages } from "./controllers/imageHandelerController.js";
 
 const app = express();
 
 app.use(cors());
 app.disable('x-powered-by');
-app.set('view engine', 'ejs')
 app.use(
   helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: {policy: "cross-origin"}
   })
 );
 app.use(express.urlencoded({ extended: true }));
 app.set('Access-Control-Allow-Origin', '*')
+
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
+  },
+})
 
 app.use('/', express.static('./images_publiées'));
 app.all('*', (request, response, next) => {
@@ -33,4 +44,6 @@ app.listen(port, () => {
   console.log(`Server ouvert sur le port ${port}`);
 });
 
-// new CronJob("0 * * * *", scheduledTranslation, null, true, undefined, undefined, true)
+new CronJob("0 * * * *", addNewImages, null, true, undefined, undefined, true)
+
+export default logger
