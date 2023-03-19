@@ -1,0 +1,11 @@
+Pour ajouter des images dans l'application il faut :
+
+- Que tout les noms de fichier commencent par le code article.
+
+- Déposer toutes les images dans le dossier upload.
+
+Les images seront déplacés et ajoutés automatiquement quelques minutes après.
+
+ATTENTION ! 
+
+Si certaines images ne sont pas déplacés du dossier upload, ça veut dire que le code article n'a pas été trouvé.
