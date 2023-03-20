@@ -36,7 +36,9 @@ const logger = pino({
 
 app.use('/api', apiRouter);
 app.use('/', express.static('./images_publiées'));
-
+app.all("*", (request,response)=> {
+  response.sendFile("not_found.jpg",  { root: "." })
+})
 app.use(errorHandeler);
 
 const port = process.env.PORT || 2000;
@@ -44,6 +46,6 @@ app.listen(port, () => {
   console.log(`Server ouvert sur le port ${port}`);
 });
 
-new CronJob("0 * * * *", addNewImages, null, true, undefined, undefined, true)
+new CronJob("*/30 * * * *", addNewImages, null, true, undefined, undefined, true)
 
 export default logger
