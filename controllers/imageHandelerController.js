@@ -3,6 +3,8 @@ import * as articleModel from "../model/article.js"
 import * as imageModel from "../model/imageHandeler.js"
 import path from 'node:path';
 import createError from 'http-errors'
+import slug from 'slug';
+slug.charmap['.'] = '.'
 
 const image_destination = "images_publiées"
 const image_location = "images_FTP/"
@@ -10,13 +12,13 @@ const image_location = "images_FTP/"
 async function moveFile(oldName, marque, division, i, code_article, buffer) {
 
   let newPath = image_destination
-  if (marque) newPath+= "/" + marque.trim().toLowerCase()
-  if (marque && division) newPath += "/" + division.trim().toLowerCase()
-  newPath+= "/" + oldName.split(".")[0] + `(${i+1}).` + oldName.split(".")[1]
+  if (marque) newPath+= "/" + slug(marque.trim().toLowerCase())
+  if (marque && division) newPath += "/" + slug(division.trim().toLowerCase())
+  newPath+= "/" + slug(oldName).split(".")[0] + `(${i+1}).` + oldName.split(".")[1]
 
   await fs.promises.mkdir(path.dirname(newPath), { recursive: true });
   if (!buffer) {
-    await fs.promises.rename(image_location+ oldName, newPath);
+    await fs.promises.rename(image_location + oldName, newPath);
   } else {
     await fs.promises.writeFile(newPath, buffer)
   }
