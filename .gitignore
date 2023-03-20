@@ -1,5 +1,5 @@
 node_modules
 uploads*
 *.env
-images/*
+images_FTP/*
 images_publiées/*

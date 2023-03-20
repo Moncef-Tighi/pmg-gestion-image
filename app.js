@@ -7,9 +7,12 @@ import cron, { CronJob } from "cron"
 import pgsql from "./model/db.js";
 import pino from "pino";
 import { addNewImages } from "./controllers/imageHandelerController.js";
+import apiRouter from "./Routers/Router.js"
 
 const app = express();
 
+
+app.use(express.json());
 app.use(cors());
 app.disable('x-powered-by');
 app.use(
@@ -31,11 +34,8 @@ const logger = pino({
   },
 })
 
+app.use('/api', apiRouter);
 app.use('/', express.static('./images_publiées'));
-app.all('*', (request, response, next) => {
-  //Dans ce cas si, le middleware va return une image vide. 
-  response.render("./pages/404.ejs", {employe : request?.user})
-});
 
 app.use(errorHandeler);
 
